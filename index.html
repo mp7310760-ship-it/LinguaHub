@@ -2,12 +2,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>My Website</title>
+<title>LinguaHub</title>
 </head>
 <body>
 
-<h1>🚀 My First Website</h1>
-<p>Welcome to my site</p>
+<h1>🌐 LinguaHub</h1>
+
+<h2>Text Converter</h2>
+<input type="text" id="text" placeholder="Enter text">
+<button onclick="convert()">Convert</button>
+<p id="result"></p>
+
+<h2>Story Audio</h2>
+<textarea id="story" placeholder="Write story..."></textarea><br>
+<button onclick="speak()">Play Audio</button>
+
+<script>
+function convert() {
+    let text = document.getElementById("text").value;
+    document.getElementById("result").innerText = text.toUpperCase();
+}
+
+function speak() {
+    let text = document.getElementById("story").value;
+    let speech = new SpeechSynthesisUtterance(text);
+    speech.lang = "en-US";
+    window.speechSynthesis.speak(speech);
+}
+</script>
 
 </body>
-</html
+</html>
