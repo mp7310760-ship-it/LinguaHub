@@ -1,58 +1,103 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>LinguaHub</title>
+<title>LinguaBook Hub</title>
+
 <style>
 body {
     font-family: Arial;
+    background: #eef2f3;
     text-align: center;
-    background: #f2f2f2;
 }
-input, textarea {
+
+h1 {
+    color: #333;
+}
+
+.container {
+    width: 90%;
+    margin: auto;
+}
+
+textarea, input, select {
     width: 80%;
     padding: 10px;
     margin: 10px;
 }
+
 button {
-    padding: 10px;
-    background: blue;
+    padding: 10px 20px;
+    background: #007bff;
     color: white;
     border: none;
+    cursor: pointer;
+}
+
+.card {
+    background: white;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 10px;
 }
 </style>
+
 </head>
 <body>
 
-<h1>🌐 LinguaHub</h1>
+<h1>🌐 LinguaBook Hub</h1>
 
-<!-- Translator -->
+<div class="container">
+
+<!-- 🌍 Translator -->
+<div class="card">
 <h2>🌍 Language Translator</h2>
+
 <input type="text" id="text" placeholder="Enter text">
+
 <select id="lang">
 <option value="en">English</option>
 <option value="hi">Hindi</option>
 <option value="fr">French</option>
 <option value="es">Spanish</option>
+<option value="de">German</option>
 </select>
-<br><br>
+
+<br>
 <button onclick="translate()">Translate</button>
+
 <p id="result"></p>
+</div>
 
-<!-- Book Publish -->
-<h2>📚 Publish Book / Story</h2>
-<textarea id="book" placeholder="Write your story..."></textarea><br>
-<button onclick="addBook()">Publish</button>
+<!-- 📚 Preloaded Books -->
+<div class="card">
+<h2>📚 Stories Library</h2>
 
-<h2>📖 All Stories</h2>
 <ul id="bookList"></ul>
+</div>
 
-<!-- Audio -->
+<!-- ➕ Add Story -->
+<div class="card">
+<h2>➕ Add Your Story</h2>
+
+<textarea id="newStory" placeholder="Write your story..."></textarea>
+<br>
+<button onclick="addStory()">Add Story</button>
+</div>
+
+<!-- 🎧 Audio -->
+<div class="card">
 <h2>🎧 Listen Story</h2>
-<textarea id="story"></textarea><br>
+
+<textarea id="storyText" placeholder="Paste story here..."></textarea>
+<br>
 <button onclick="speak()">Play Audio</button>
+</div>
+
+</div>
 
 <script>
-// Translator
+
+// 🌍 Translator
 function translate() {
     let text = document.getElementById("text").value;
     let lang = document.getElementById("lang").value;
@@ -65,33 +110,55 @@ function translate() {
     });
 }
 
-// Book system (local)
-let books = [];
+// 📚 Preloaded Stories
+let stories = [
+"Once upon a time, a lion lived in a forest.",
+"A boy had a magical pencil that could draw real things.",
+"एक बार एक किसान था जो बहुत मेहनती था।",
+"A clever fox tricked a crow to get food.",
+"There was a brave girl who saved her village."
+];
 
-function addBook() {
-    let book = document.getElementById("book").value;
-    books.push(book);
-    showBooks();
-}
-
-function showBooks() {
+// Show stories
+function showStories() {
     let list = document.getElementById("bookList");
     list.innerHTML = "";
 
-    books.forEach(b => {
+    stories.forEach((story, index) => {
         let li = document.createElement("li");
-        li.innerText = b;
+        li.innerHTML = story + 
+        `<br><button onclick="playStory(${index})">🎧 Play</button>`;
         list.appendChild(li);
     });
 }
 
-// Audio
+// Add new story
+function addStory() {
+    let newStory = document.getElementById("newStory").value;
+    if(newStory.trim() !== "") {
+        stories.push(newStory);
+        showStories();
+    }
+}
+
+// 🎧 Audio play
 function speak() {
-    let text = document.getElementById("story").value;
+    let text = document.getElementById("storyText").value;
     let speech = new SpeechSynthesisUtterance(text);
     speech.lang = "en-US";
     window.speechSynthesis.speak(speech);
 }
+
+// Play from list
+function playStory(index) {
+    let speech = new SpeechSynthesisUtterance(stories[index]);
+    speech.lang = "en-US";
+    window.speechSynthesis.speak(speech);
+}
+
+// Load stories
+showStories();
+
 </script>
 
 </body>
