@@ -1,28 +1,91 @@
-
 <!DOCTYPE html>
 <html>
 <head>
 <title>LinguaHub</title>
+<style>
+body {
+    font-family: Arial;
+    text-align: center;
+    background: #f2f2f2;
+}
+input, textarea {
+    width: 80%;
+    padding: 10px;
+    margin: 10px;
+}
+button {
+    padding: 10px;
+    background: blue;
+    color: white;
+    border: none;
+}
+</style>
 </head>
 <body>
 
 <h1>🌐 LinguaHub</h1>
 
-<h2>Text Converter</h2>
+<!-- Translator -->
+<h2>🌍 Language Translator</h2>
 <input type="text" id="text" placeholder="Enter text">
-<button onclick="convert()">Convert</button>
+<select id="lang">
+<option value="en">English</option>
+<option value="hi">Hindi</option>
+<option value="fr">French</option>
+<option value="es">Spanish</option>
+</select>
+<br><br>
+<button onclick="translate()">Translate</button>
 <p id="result"></p>
 
-<h2>Story Audio</h2>
-<textarea id="story" placeholder="Write story..."></textarea><br>
+<!-- Book Publish -->
+<h2>📚 Publish Book / Story</h2>
+<textarea id="book" placeholder="Write your story..."></textarea><br>
+<button onclick="addBook()">Publish</button>
+
+<h2>📖 All Stories</h2>
+<ul id="bookList"></ul>
+
+<!-- Audio -->
+<h2>🎧 Listen Story</h2>
+<textarea id="story"></textarea><br>
 <button onclick="speak()">Play Audio</button>
 
 <script>
-function convert() {
+// Translator
+function translate() {
     let text = document.getElementById("text").value;
-    document.getElementById("result").innerText = text.toUpperCase();
+    let lang = document.getElementById("lang").value;
+
+    fetch(`https://api.mymemory.translated.net/get?q=${text}&langpair=auto|${lang}`)
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("result").innerText =
+        data.responseData.translatedText;
+    });
 }
 
+// Book system (local)
+let books = [];
+
+function addBook() {
+    let book = document.getElementById("book").value;
+    books.push(book);
+    showBooks();
+}
+
+function showBooks() {
+    let list = document.getElementById("bookList");
+    list.innerHTML = "";
+
+    books.forEach(b => {
+        let li = document.createElement("li");
+        li.innerText = b;
+        list.appendChild(li);
+    });
+}
+
+// Audio
 function speak() {
     let text = document.getElementById("story").value;
     let speech = new SpeechSynthesisUtterance(text);
