@@ -159,8 +159,7 @@ window.login = function () {
   signInWithEmailAndPassword(auth, email, pass)
     .then(() => alert("Login Success ✅"))
     .catch((error) => alert("Error ❌ " + error.message));
-};
-</script >
 <button onclick="login()">Login with Google</button>
 <button onclick="logout()">Logout</button>
+
 <p id="user"></p>
